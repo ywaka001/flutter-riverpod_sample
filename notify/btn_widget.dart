@@ -1,14 +1,18 @@
 import 'package:banana/riverpod_sample/notify/todosnotifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:banana/riverpod_sample/notify/getdata.dart';
+
 
 
 
 
 class BtnWidGet extends StatelessWidget {
-  const BtnWidGet({super.key, required this.title});
+  BtnWidGet({super.key, required this.title});
 
   final title;
+
+  List<Map<String, String>>items = GetData();
 
   _updateTitle(WidgetRef ref) {
 
@@ -48,6 +52,7 @@ class BtnWidGet extends StatelessWidget {
             child: Text(title.toString()),
             onPressed: () =>
             {
+              print('aaaa==>>' + items[0]['cd'].toString()),
               _updateTitle(ref),
             }
           ),
