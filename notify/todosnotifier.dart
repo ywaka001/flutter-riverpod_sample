@@ -38,7 +38,7 @@ class TodosNotifier extends StateNotifier<List<Todo>> {
   // Todo リストを空のリストとして初期化します。
   TodosNotifier(): super([
     // 初期値
-    // Todo(id: '001', description: 'メモ0', completed: false, title: 'Title01'),
+    Todo(id: '001', description: 'メモ0', completed: false, title: 'Title01'),
   ]);
 
   // Todo の追加

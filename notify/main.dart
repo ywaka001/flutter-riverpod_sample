@@ -2,7 +2,7 @@ import 'package:banana/riverpod_sample/notify/btn_widget.dart';
 import 'package:banana/main_tab.dart';
 import 'package:banana/riverpod_sample/notify/todosnotifier.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 
 
@@ -24,7 +24,7 @@ void main() {
 // }
 
 
-class MyApp extends ConsumerWidget {
+class MyApp extends HookConsumerWidget {
   const MyApp({super.key});
 
   // This widget is the root of your application.
@@ -50,8 +50,8 @@ class MyApp extends ConsumerWidget {
 
     List<Todo> todos = ref.watch(todosProvider);
 
-    final title = todos.where((a) => a.id == '001').map((e) => e.title);
-
+    final title = todos.where((a) => a.id == '001').toList()[0].title.toString();
+    print('title ==>>' + title);
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
