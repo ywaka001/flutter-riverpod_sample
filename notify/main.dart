@@ -1,10 +1,12 @@
 import 'dart:io';
-
+import 'package:banana/riverpod_sample/notify/mdl_listview_data.dart';
 import 'package:banana/riverpod_sample/notify/btn_widget.dart';
 import 'package:banana/main_tab.dart';
+import 'package:banana/riverpod_sample/notify/listview.dart';
 import 'package:banana/riverpod_sample/notify/todosnotifier.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
 void main() {
   runApp(
@@ -46,22 +48,22 @@ class MyApp extends HookConsumerWidget {
     //       title: 'title'
     //   ),);
 
-    String title2 = '';
-    List<Map<String, String>> lst = [
-      {'id': '1', 'data': 'dog'},
-      {'id': '2', 'data': 'cat'}
-    ];
-    try {
-      title2 = lst
-          .where((a) => a['id'].toString() == '5')
-          .toList()[0]['data']
-          .toString();
-    } catch (e) {
-      print('err ===>>>' + e.toString());
-      // throw(e.toString());
-      // exitCode;
-    }
-    print('titles => ' + title2);
+    // String title2 = '';
+    // List<Map<String, String>> lst = [
+    //   {'id': '1', 'data': 'dog'},
+    //   {'id': '2', 'data': 'cat'}
+    // ];
+    // try {
+    //   title2 = lst
+    //       .where((a) => a['id'].toString() == '1')
+    //       .toList()[0]['data']
+    //       .toString();
+    // } catch (e) {
+    //   print('err ===>>>' + e.toString());
+    //   // throw(e.toString());
+    //   // exitCode;
+    // }
+    // print('titles => ' + title2);
 
     String c = '';
     final String b = '';
@@ -78,8 +80,55 @@ class MyApp extends HookConsumerWidget {
 
     List<Todo> todos = ref.watch(todosProvider);
 
+    // Test  start
+    // useEffect(() {
+    //   WidgetsBinding.instance.addPostFrameCallback((_) {
+    //     final lstData = todos.where((a) => a.id == '002').toList()[0];
+    //     print('lstData');
+    //     print(lstData.value);
+    //     print('★★★update_before★★★');
+    //     // try {
+    //     ref.read(todosProvider.notifier).updateValue('002', lst);
+    //     // } catch (e) {
+    //     //   print('Err =>>>' + e.toString());
+    //     // }
+    //
+    //     print('★★★update_after★★★');
+    //
+    //     var lstData2 = todos.where((a) => a.id == '002').toList()[0];
+    //     print(lstData2.value);
+    //     print('lstData2');
+    //     // Test  end
+    //   });
+    // }, []);
+
+    // ListDataを追加する。
+    _addListData() {
+      String itemA = 'Text4';
+      String itemB = '5500';
+      String itemC = '550';
+      print('★★★item_set★★★');
+      List<Map<String, dynamic>> item = [
+        {
+          'text': '{$itemA}',
+          'price': '{$itemB}',
+          'tax': '{$itemC}',
+        }
+      ];
+      ref.read(todosProvider.notifier).updateValue('002', item);
+      // ★★★★★Completed false⇒true★★★★★
+      ref.read(todosProvider.notifier).toggle('002');
+
+      print('★★★update_after3★★★');
+      var lstData3 = todos.where((a) => a.id == '002').toList()[0];
+      print(lstData3.value);
+      print('lstData3');
+
+      // List<Map<String, dynamic>> lsta = ListViewData().listviewdata;
+    }
+
     final title =
-        todos.where((a) => a.id == '001').toList()[0].title.toString();
+        todos.where((a) => a.id == '001').toList()[0].value.toString();
     print('title ==>>' + title);
     return MaterialApp(
       title: 'Flutter Demo',
@@ -87,12 +136,19 @@ class MyApp extends HookConsumerWidget {
         primarySwatch: Colors.blue,
       ),
       home: Container(
-        child: BtnWidGet(
-            title: title,
-            onPressedCallback: () {
-              var x = _test('aa', 'b', 'c');
-              print('return = >' + x);
-            }),
+        // height: 500,
+        child: Column(
+          children: [
+            ListViewWidGet(),
+            BtnWidGet(
+                title: title,
+                onPressedCallback: () {
+                  var x = _test('aa', 'b', 'c');
+                  _addListData();
+                  print('return = >' + x);
+                }),
+          ],
+        ),
       ), //BtnWidGet(title: title, onPressedCallback: _test('aaa', 'bbb'),),
     );
   }

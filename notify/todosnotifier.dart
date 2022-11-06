@@ -9,24 +9,24 @@ class Todo {
     required this.id,
     required this.description,
     required this.completed,
-    required this.title,
+    required this.value,
   });
 
   // イミュータブルなクラスのプロパティはすべて `final` にする必要があります。
   final String id;
   final String description;
   final bool completed;
-  final String title;
+  final dynamic value;
 
   // Todo はイミュータブルであり、内容を直接変更できないためコピーを作る必要があります。
   // これはオブジェクトの各プロパティの内容をコピーして新たな Todo を返すメソッドです。
-  Todo copyWith({String? id, String? description, bool? completed, String? title}) {
+  Todo copyWith(
+      {String? id, String? description, bool? completed, dynamic? value}) {
     return Todo(
-      id: id ?? this.id,
-      description: description ?? this.description,
-      completed: completed ?? this.completed,
-      title: title ?? this.title
-    );
+        id: id ?? this.id,
+        description: description ?? this.description,
+        completed: completed ?? this.completed,
+        value: value ?? this.value);
   }
 }
 
@@ -36,10 +36,20 @@ class Todo {
 // public メソッドを通じて UI 側にステートの操作を許可します。
 class TodosNotifier extends StateNotifier<List<Todo>> {
   // Todo リストを空のリストとして初期化します。
-  TodosNotifier(): super([
-    // 初期値
-    Todo(id: '001', description: 'メモ0', completed: false, title: 'Title01'),
-  ]);
+  TodosNotifier()
+      : super([
+          // 初期値
+          Todo(
+              id: '001',
+              description: 'メモ0',
+              completed: false,
+              value: 'Title01'),
+          Todo(
+              id: '002',
+              description: 'ListData',
+              completed: false,
+              value: [{}]),
+        ]);
 
   // Todo の追加
   void addTodo(Todo todo) {
@@ -72,14 +82,30 @@ class TodosNotifier extends StateNotifier<List<Todo>> {
   void toggle(String todoId) {
     state = [
       for (final todo in state)
-      // ID がマッチした Todo のみ、完了ステータスを変更します。
+        // ID がマッチした Todo のみ、完了ステータスを変更します。
         if (todo.id == todoId)
-        // またまたしつこいですが、ステートはイミュータブルなので
-        // Todo クラスに実装した `copyWith` メソッドを使用して
-        // Todo オブジェクトのコピーを作る必要があります。
+          // またまたしつこいですが、ステートはイミュータブルなので
+          // Todo クラスに実装した `copyWith` メソッドを使用して
+          // Todo オブジェクトのコピーを作る必要があります。
           todo.copyWith(completed: !todo.completed)
         else
-        // ID が一致しない Todo は変更しません。
+          // ID が一致しない Todo は変更しません。
+          todo,
+    ];
+  }
+
+  // Todo の完了ステータスの変更
+  void updateValue(String todoId, dynamic value) {
+    state = [
+      for (final todo in state)
+        // ID がマッチした Todo のみ、完了ステータスを変更します。
+        if (todo.id == todoId)
+          // またまたしつこいですが、ステートはイミュータブルなので
+          // Todo クラスに実装した `copyWith` メソッドを使用して
+          // Todo オブジェクトのコピーを作る必要があります。
+          todo.copyWith(value: value)
+        else
+          // ID が一致しない Todo は変更しません。
           todo,
     ];
   }

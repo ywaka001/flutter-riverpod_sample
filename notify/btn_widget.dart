@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:banana/riverpod_sample/notify/getdata.dart';
 
-
-
 class BtnWidGet extends StatefulWidget {
-  BtnWidGet({super.key, required this.title, required this.onPressedCallback}); //
+  BtnWidGet(
+      {super.key, required this.title, required this.onPressedCallback}); //
 
   final title;
   final Function onPressedCallback;
@@ -16,28 +15,26 @@ class BtnWidGet extends StatefulWidget {
 }
 
 class _BtnWidGetState extends State<BtnWidGet> {
-  List<Map<String, String>>items = GetData();
-
-
+  List<Map<String, String>> items = GetData();
 
   _updateTitle(WidgetRef ref) {
-
     List<Todo> todos = ref.watch(todosProvider);
 
-    final title = todos.where((a) => a.id == '002').map((e) => e.title);
+    final title = todos.where((a) => a.id == '002').map((e) => e.value);
     print('チェックテスト1：' + title.toString());
 
-    if(title.toString() == '()'){
+    if (title.toString() == '()') {
       print('追加処理：' + '002');
 
-      ref.read(todosProvider.notifier).addTodo(Todo(id: '002', description: 'description', completed: false, title: 'title 02'));
-      final title2 = todos.where((a) => a.id == '002').map((e) => e.title);
+      ref.read(todosProvider.notifier).addTodo(Todo(
+          id: '002',
+          description: 'description',
+          completed: false,
+          value: 'title 02'));
+      final title2 = todos.where((a) => a.id == '002').map((e) => e.value);
       print('チェックテスト2：' + title2.toString());
-
     }
-
   }
-
 
   // late var keyData = '';
   // void _RtnData(a){
@@ -45,7 +42,6 @@ class _BtnWidGetState extends State<BtnWidGet> {
   //     keyData = a;
   //   });
   // }
-
 
   @override
   Widget build(BuildContext context) {
@@ -60,23 +56,22 @@ class _BtnWidGetState extends State<BtnWidGet> {
       //       },
       //       child: const Icon(Icons.add));
       // });
-      return
-        Container(
-          child: ElevatedButton(
-            child: Text(widget.title.toString()),
-            onPressed: (){
-              var a = widget.onPressedCallback().toString();
-              print ('btnの中' + a);
-            },
+      return Container(
+        child: ElevatedButton(
+          child: Text(widget.title.toString()),
+          onPressed: () {
+            widget.onPressedCallback();
+            // var a = widget.onPressedCallback().toString();
+            // print('btnの中' + a);
+          },
 
-
-            // onPressed: () =>
-            // {
-            //   print('aaaa==>>' + items[0]['cd'].toString()),
-            //   _updateTitle(ref),
-            // }
-          ),
-        );
+          // onPressed: () =>
+          // {
+          //   print('aaaa==>>' + items[0]['cd'].toString()),
+          //   _updateTitle(ref),
+          // }
+        ),
+      );
     });
   }
 }
