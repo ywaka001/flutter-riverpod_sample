@@ -108,13 +108,11 @@ class MyApp extends HookConsumerWidget {
       String itemB = '5500';
       String itemC = '550';
       print('★★★item_set★★★');
-      List<Map<String, dynamic>> item = [
-        {
-          'text': '{$itemA}',
-          'price': '{$itemB}',
-          'tax': '{$itemC}',
-        }
-      ];
+      Map<String, dynamic> item = {
+        'text': '{$itemA}',
+        'price': '{$itemB}',
+        'tax': '{$itemC}',
+      };
       ref.read(todosProvider.notifier).updateValue('002', item);
       // ★★★★★Completed false⇒true★★★★★
       ref.read(todosProvider.notifier).toggle('002');

@@ -5,27 +5,27 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:banana/riverpod_sample/notify/todosnotifier.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+List<Map<String, dynamic>> listItems = [
+  {
+    'text': 'Item 1',
+    'price': '6000',
+    'tax': '600',
+  },
+  {
+    'text': 'Item 2',
+    'price': '8000',
+    'tax': '800',
+  },
+  {
+    'text': 'Item 3',
+    'price': '9000',
+    'tax': '900',
+  },
+];
+
 class ListViewWidGet extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final List<Map<String, dynamic>> listItems = [
-      {
-        'text': 'Item 1',
-        'price': '6000',
-        'tax': '600',
-      },
-      {
-        'text': 'Item 2',
-        'price': '8000',
-        'tax': '800',
-      },
-      {
-        'text': 'Item 3',
-        'price': '9000',
-        'tax': '900',
-      },
-    ];
-
     final isSwicth = useState(false);
     List itemChecked2 = [];
     List<Todo> todos = ref.watch(todosProvider);
@@ -33,7 +33,7 @@ class ListViewWidGet extends HookConsumerWidget {
     // modelクラスにデータを登録
     // ListViewData(listviewdata: listItems);
     // var a = ListViewData().listviewdat
-    var bln =
+    final bln =
         useState<bool>(todos.where((a) => a.id == '002').toList()[0].completed);
     // useEffect(() {
     //   bln = useState<bool>(
@@ -50,34 +50,40 @@ class ListViewWidGet extends HookConsumerWidget {
     }, []);
 
     final itemChecked = useState<List<dynamic>>([...itemChecked2]);
+    bool blncmp2 = todos.where((a) => a.id == '002').toList()[0].completed;
+    print('blncmp2>>>>>>>' + blncmp2.toString());
 
-    useEffect(() {
+    bool blncmp = todos.where((a) => a.id == '002').toList()[0].completed;
+    // useEffect(() {
+    print('■□■ntf_item■□■start');
+    print(blncmp);
+    print('■□■ntf_item■□■end');
+    if (blncmp) {
+      var ntf_item = todos.where((a) => a.id == '002').toList()[0];
+      print('□□□ntf_item□□□');
+      print(ntf_item.value['text']);
+      print(ntf_item.value);
+      print(listItems.length);
+      Map<String, dynamic> item = {
+        'text': ntf_item.value['text'],
+        'price': ntf_item.value['price'].toString(),
+        'tax': ntf_item.value['tax'].toString(),
+      };
+      print(item);
+
+      listItems = [...listItems, item];
+
+      print(listItems.length);
+      print('□□□ntf_item□□□');
+      // listItems.add(ntf_item.value['text']);
+
+      // ★★★★★Completed true⇒false★★★★★
+      print('★★★★★Completed true⇒false★★★★★');
       Future.microtask(() {
-        print('■□■ntf_item■□■start');
-        print(todos.where((a) => a.id == '002').toList()[0].completed);
-        print('■□■ntf_item■□■end');
-
-        if (todos.where((a) => a.id == '002').toList()[0].completed) {
-          var ntf_item = todos.where((a) => a.id == '002').toList()[0];
-          print('□□□ntf_item□□□');
-          print(ntf_item.value[0]['text']);
-          print(listItems.length);
-          Map<String, dynamic> item = {
-            'text': '${ntf_item.value[0]['text']}',
-            'price': '${ntf_item.value[0]['price'].toString()}',
-            'tax': '${ntf_item.value[0]['tax'].toString()}',
-          };
-          print(item);
-          listItems.add(item);
-          print(listItems.length);
-          print('□□□ntf_item□□□');
-          // listItems.add(ntf_item.value['text']);
-
-          // ★★★★★Completed true⇒false★★★★★
-          ref.read(todosProvider.notifier).toggle('002');
-        }
+        ref.read(todosProvider.notifier).toggle('002');
       });
-    }, [bln]);
+    }
+    // }, [bln]);
 
     useEffect(() {
       // Listの件数が増えたら追加する
